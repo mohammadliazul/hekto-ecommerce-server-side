@@ -24,13 +24,14 @@ async function run() {
 
         const database = client.db("hekto_Database");
         const productsCollection = database.collection("products");
+        const reviewsCollection = database.collection("reviews");
 
 
-        // POST API
+        // POST products API
         app.post('/products', async (req, res) => {
             const product = req.body;
-            // console.log('hit the post api', product);
-            // res.send('post hitted');
+            // console.log('hit the post product api', product);
+            // res.send('post product hitted');
 
             const result = await productsCollection.insertOne(product);
             // console.log(result);
@@ -44,6 +45,24 @@ async function run() {
             res.send(products);
         });
 
+        // POST reviews/testimonials API
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            // console.log('hit the post review api', review);
+            // res.send('post review hitted');
+
+            const result = await reviewsCollection.insertOne(review);
+            // console.log(result);
+            res.json(result);
+        });
+
+
+        // Get reviews/testimonials API
+        app.get('/reviews', async (req, res) => {
+            const cursor = reviewsCollection.find({});
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+        });
 
     }
     finally {
